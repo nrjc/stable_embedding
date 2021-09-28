@@ -1,0 +1,8 @@
+import data
+import trainer
+import models
+
+Trainer.data_provider = @MNIST()
+Trainer.model = @AutoEncoder()
+AutoEncoder.input_shape = 784
+MNIST.root = "~/torch_datasets"
