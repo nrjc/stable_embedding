@@ -5,7 +5,7 @@ from data.dataprovider import DataProvider
 
 
 @gin.configurable
-class Trainer:
+class VanillaTrainer:
     def __init__(self, data_provider: DataProvider, model: nn.Module, epochs=20, lr=1e-3, viewed_shape=784):
         provider = data_provider()
         self.train_data, self.test_data = provider

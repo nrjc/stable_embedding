@@ -1,1 +1,2 @@
 import models.autoencoder
+import models.pinned_autoencoder

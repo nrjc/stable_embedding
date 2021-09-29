@@ -1,8 +1,16 @@
 import data
 import trainer
 import models
+# Change this to change the training type
+get_trainer.trainer = @VanillaTrainer()
 
-Trainer.data_provider = @MNIST()
-Trainer.model = @AutoEncoder()
+VanillaTrainer.data_provider = @MNIST()
+VanillaTrainer.model = @AutoEncoder()
 AutoEncoder.input_shape = 784
 MNIST.root = "~/torch_datasets"
+
+PinnedTrainer.data_provider_base = @MNIST()
+PinnedTrainer.data_provider_encoded = @DataFrameLoader()
+PinnedTrainer.model = @PinnedAutoEncoder()
+PinnedAutoEncoder.input_shape = 784
+DataFrameLoader.root = "~/torch_datasets"

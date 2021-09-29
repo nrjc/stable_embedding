@@ -4,15 +4,18 @@
 # Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
 import gin
 
-from trainer.Trainer import Trainer
-
 
 def run_main():
     # Use a breakpoint in the code line below to debug your script.
     gin.parse_config_file('config.gin')
 
-    trainer = Trainer()
+    trainer = get_trainer()
     trainer()
+
+
+@gin.configurable
+def get_trainer(trainer=gin.REQUIRED):
+    return trainer
 
 
 # Press the green button in the gutter to run the script.
