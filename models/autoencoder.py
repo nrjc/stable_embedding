@@ -2,6 +2,7 @@ import gin
 import torch
 from torch import nn
 
+
 @gin.configurable
 class AutoEncoder(nn.Module):
     def __init__(self, input_shape, **kwargs):

@@ -1,16 +1,22 @@
 import data
 import trainer
 import models
-# Change this to change the training type
-get_trainer.trainer = @VanillaTrainer()
 
+intermediate_path = "intermediate_data.pt"
+
+# Vanilla Trainer Definitions
+get_vanilla_trainer.trainer = @VanillaTrainer()
 VanillaTrainer.data_provider = @MNIST()
 VanillaTrainer.model = @AutoEncoder()
+VanillaTrainer.epochs = 1
+VanillaTrainer.save_path = %intermediate_path
 AutoEncoder.input_shape = 784
 MNIST.root = "~/torch_datasets"
 
+# Pinned Trainer Definitions
+get_pinned_trainer.trainer = @PinnedTrainer()
 PinnedTrainer.data_provider_base = @MNIST()
 PinnedTrainer.data_provider_encoded = @DataFrameLoader()
 PinnedTrainer.model = @PinnedAutoEncoder()
 PinnedAutoEncoder.input_shape = 784
-DataFrameLoader.root = "~/torch_datasets"
+DataFrameLoader.root = %intermediate_path

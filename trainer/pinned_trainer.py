@@ -1,6 +1,7 @@
 import gin
 from torch import optim, nn
 
+from data.dataframe_loader import DataFrameLoader
 from data.dataprovider import DataProvider
 from models.pinned_autoencoder import PinnedAutoEncoderOutput
 
@@ -9,17 +10,17 @@ from models.pinned_autoencoder import PinnedAutoEncoderOutput
 class PinnedTrainer:
     model: nn.Module
 
-    def __init__(self, data_provider_base: DataProvider, data_provider_encoded: DataProvider, model: nn.Module,
-                 epochs=20, lr=1e-3, viewed_shape=784):
+    def __init__(self, data_provider_base: DataProvider, data_provider_encoded: DataFrameLoader, model: nn.Module,
+                 epochs=20, lr=1e-3, viewed_shape=784, load_path=""):
         provider = data_provider_base()
         self.train_data_base, self.test_data_base = provider
-        provider2 = data_provider_encoded()
-        self.train_data_encoded, _ = provider2
+        self.train_data_encoded = data_provider_encoded()
         self.epochs = epochs
         self.model = model
         self.optimizer = optim.Adam(model.parameters(), lr=lr)
         self.criterion = nn.MSELoss()
         self.viewed_shape = viewed_shape
+        self.load_path = load_path
 
     def __call__(self, *args, **kwargs):
         for epoch in range(self.epochs):
