@@ -1,11 +1,17 @@
 import itertools
+import logging
+import os
 
 import gin
 import torch
+from joblib import dump
+from sklearn.decomposition import PCA
 from torch import optim, nn
 from torch.utils.data import TensorDataset
 
 from data.dataprovider import DataProvider
+
+logger = logging.getLogger(__name__)
 
 
 @gin.configurable
@@ -20,6 +26,7 @@ class VanillaTrainer:
         self.criterion = nn.MSELoss()
         self.viewed_shape = viewed_shape
         self.save_path = save_path
+        self.pca = PCA(n_components=2)
 
     def __call__(self, *args, **kwargs):
         for epoch in range(self.epochs):
@@ -51,14 +58,18 @@ class VanillaTrainer:
     def run_all_and_save(self):
         batch_inputs = []
         outputs = []
-        for batch_features, _ in itertools.islice(self.train_data, 3):
+        for batch_features, _ in self.train_data:
             # This is needed to massage the 128, 1, 28, 28 vector into something more congenial
             batch_features = batch_features.view(-1, self.viewed_shape)
             compressed_vec = self.model.get_compressed_vec(batch_features)
             batch_inputs.append(batch_features)
             outputs.append(compressed_vec)
         with torch.no_grad():
-            input_tensor = torch.stack(batch_inputs)
-            output_tensor = torch.stack(outputs)
+            input_tensor = torch.cat(batch_inputs)
+            output_tensor = torch.cat(outputs)
+            # Training PCA dim reduction
+            self.pca.fit(output_tensor.numpy())
             output_obj = TensorDataset(input_tensor, output_tensor)
-            torch.save(output_obj, self.save_path)
+            os.makedirs(self.save_path, exist_ok=True)
+            dump(self.pca, os.path.join(self.save_path, 'pca.joblib'))
+            torch.save(output_obj, os.path.join(self.save_path, 'tensordataset.pt'))

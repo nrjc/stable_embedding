@@ -1,3 +1,5 @@
 torch
 torchvision
 gin-config
+sklearn
+matplotlib

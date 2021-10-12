@@ -2,14 +2,13 @@ import data
 import trainer
 import models
 
-intermediate_path = "intermediate_data.pt"
 
 # Vanilla Trainer Definitions
 get_vanilla_trainer.trainer = @VanillaTrainer()
 VanillaTrainer.data_provider = @MNIST()
 VanillaTrainer.model = @AutoEncoder()
 VanillaTrainer.epochs = 1
-VanillaTrainer.save_path = %intermediate_path
+VanillaTrainer.save_path = "intermediate_data"
 AutoEncoder.input_shape = 784
 MNIST.root = "~/torch_datasets"
 
@@ -19,4 +18,6 @@ PinnedTrainer.data_provider_base = @MNIST()
 PinnedTrainer.data_provider_encoded = @DataFrameLoader()
 PinnedTrainer.model = @PinnedAutoEncoder()
 PinnedAutoEncoder.input_shape = 784
-DataFrameLoader.root = %intermediate_path
+DataFrameLoader.root = "intermediate_data/tensordataset.pt"
+PinnedTrainer.pca_load_path = "intermediate_data/pca.joblib"
+PinnedTrainer.epochs = 1

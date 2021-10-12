@@ -17,6 +17,7 @@ def run_main():
     trainer.run_all_and_save()
     pinned_trainer = get_pinned_trainer()
     pinned_trainer()
+    pinned_trainer.evaluate()
 
 
 @gin.configurable
