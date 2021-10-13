@@ -21,3 +21,4 @@ PinnedAutoEncoder.input_shape = 784
 DataFrameLoader.root = "intermediate_data/tensordataset.pt"
 PinnedTrainer.pca_load_path = "intermediate_data/pca.joblib"
 PinnedTrainer.epochs = 1
+PinnedTrainer.scaling_factor = 0

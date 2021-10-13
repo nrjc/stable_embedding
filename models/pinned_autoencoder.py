@@ -6,7 +6,8 @@ from torch import nn
 
 
 class PinnedAutoEncoderOutput(NamedTuple):
-    pinned_loss: torch.Tensor
+    pinned_target: torch.Tensor
+    compressed_vec: torch.Tensor
     reconstructed: torch.Tensor
 
 
@@ -26,7 +27,6 @@ class PinnedAutoEncoder(nn.Module):
         self.decoder_output_layer = nn.Linear(
             in_features=128, out_features=input_shape
         )
-        self.loss = nn.MSELoss()
         self.pinned_loss_scaling_factor = pinned_loss_scaling_factor
 
     def get_compressed_vec(self, features: torch.Tensor) -> torch.Tensor:
@@ -44,5 +44,4 @@ class PinnedAutoEncoder(nn.Module):
         activation = self.decoder_output_layer(activation)
         reconstructed = torch.relu(activation)
         compressed_vec = self.get_compressed_vec(pinned_features)
-        pinned_loss = self.loss(pinned_target, compressed_vec)
-        return PinnedAutoEncoderOutput(pinned_loss * self.pinned_loss_scaling_factor, reconstructed)
+        return PinnedAutoEncoderOutput(pinned_target, compressed_vec, reconstructed)
