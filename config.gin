@@ -2,6 +2,9 @@ import data
 import trainer
 import models
 
+tensordataset_path = "intermediate_data/tensordataset.pt"
+pca_path = "intermediate_data/pca.joblib"
+classifier_path = "intermediate_data/classifier.joblib"
 
 # Vanilla Trainer Definitions
 get_vanilla_trainer.trainer = @VanillaTrainer()
@@ -18,7 +21,8 @@ PinnedTrainer.data_provider_base = @MNIST()
 PinnedTrainer.data_provider_encoded = @DataFrameLoader()
 PinnedTrainer.model = @PinnedAutoEncoder()
 PinnedAutoEncoder.input_shape = 784
-DataFrameLoader.root = "intermediate_data/tensordataset.pt"
-PinnedTrainer.pca_load_path = "intermediate_data/pca.joblib"
+DataFrameLoader.root =  %tensordataset_path
+PinnedTrainer.pca_load_path = %pca_path
+PinnedTrainer.classifier_load_path = %classifier_path
 PinnedTrainer.epochs = 1
-PinnedTrainer.scaling_factor = 0
+PinnedTrainer.scaling_factor = 0.1
