@@ -10,9 +10,10 @@ classifier_path = "intermediate_data/classifier.joblib"
 get_vanilla_trainer.trainer = @VanillaTrainer()
 VanillaTrainer.data_provider = @MNIST()
 VanillaTrainer.model = @AutoEncoder()
-VanillaTrainer.epochs = 1
+VanillaTrainer.epochs = 20
 VanillaTrainer.save_path = "intermediate_data"
 AutoEncoder.input_shape = 784
+AutoEncoder.inner_layer = 10
 MNIST.root = "~/torch_datasets"
 
 # Pinned Trainer Definitions
@@ -21,8 +22,9 @@ PinnedTrainer.data_provider_base = @MNIST()
 PinnedTrainer.data_provider_encoded = @DataFrameLoader()
 PinnedTrainer.model = @PinnedAutoEncoder()
 PinnedAutoEncoder.input_shape = 784
+PinnedAutoEncoder.inner_layer = 10
 DataFrameLoader.root =  %tensordataset_path
 PinnedTrainer.pca_load_path = %pca_path
 PinnedTrainer.classifier_load_path = %classifier_path
-PinnedTrainer.epochs = 1
-PinnedTrainer.scaling_factor = 0.1
+PinnedTrainer.epochs = 20
+PinnedTrainer.scaling_factor = 0

@@ -5,16 +5,16 @@ from torch import nn
 
 @gin.configurable
 class AutoEncoder(nn.Module):
-    def __init__(self, input_shape, **kwargs):
+    def __init__(self, input_shape, inner_layer=128, **kwargs):
         super().__init__()
         self.encoder_hidden_layer = nn.Linear(
             in_features=input_shape, out_features=128
         )
         self.encoder_output_layer = nn.Linear(
-            in_features=128, out_features=128
+            in_features=128, out_features=inner_layer
         )
         self.decoder_hidden_layer = nn.Linear(
-            in_features=128, out_features=128
+            in_features=inner_layer, out_features=128
         )
         self.decoder_output_layer = nn.Linear(
             in_features=128, out_features=input_shape
