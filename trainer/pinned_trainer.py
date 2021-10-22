@@ -39,13 +39,11 @@ class PinnedTrainer:
             loss = 0
             for (batch_features, _), (encode_ft, encode_tar) in zip(self.train_data_base, self.train_data_encoded):
                 # This is needed to massage the 128, 1, 28, 28 vector into something more congenial
-                batch_features = batch_features.view(-1, self.viewed_shape)
-                encoded_features = encode_ft.view(-1, self.viewed_shape)
 
                 self.optimizer.zero_grad()
 
                 # compute reconstructions
-                outputs = self.model(batch_features, encoded_features, encode_tar)  # type: PinnedAutoEncoderOutput
+                outputs = self.model(batch_features, encode_ft, encode_tar)  # type: PinnedAutoEncoderOutput
 
                 # compute training reconstruction loss
                 total_loss = self.criterion(outputs.reconstructed,
@@ -73,7 +71,6 @@ class PinnedTrainer:
         new_encoded_data = []
         classf = []
         for batch_features, output_class in self.train_data_base:
-            batch_features = batch_features.view(-1, self.viewed_shape)
             compressed_vec = self.model.get_compressed_vec(batch_features)
             new_encoded_data.append(compressed_vec)
             classf.append(output_class)

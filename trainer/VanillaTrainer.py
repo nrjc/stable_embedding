@@ -35,7 +35,6 @@ class VanillaTrainer:
             loss = 0
             for batch_features, _ in self.train_data:
                 # This is needed to massage the 128, 1, 28, 28 vector into something more congenial
-                batch_features = batch_features.view(-1, self.viewed_shape)
 
                 self.optimizer.zero_grad()
 
@@ -63,7 +62,6 @@ class VanillaTrainer:
         sample_classes = []
         for batch_features, sample_class in self.train_data:
             # This is needed to massage the 128, 1, 28, 28 vector into something more congenial
-            batch_features = batch_features.view(-1, self.viewed_shape)
             compressed_vec = self.model.get_compressed_vec(batch_features)
             batch_inputs.append(batch_features)
             outputs.append(compressed_vec)
